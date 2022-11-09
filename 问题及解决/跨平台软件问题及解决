@@ -1,0 +1,41 @@
+【场景】Git push代码
+【现象】报错Failed to connect to github.com port 443: Timed out
+【解决方案】在gitbash执行以下命令：
+git config --global --unset http.proxy
+git config --global --unset https.proxy
+
+【场景】
+【现象】
+【解决方案】
+
+【场景】
+【现象】
+【解决方案】
+
+【场景】
+【现象】
+【解决方案】
+
+【场景】
+【现象】
+【解决方案】
+
+【场景】
+【现象】
+【解决方案】
+
+【场景】
+【现象】
+【解决方案】
+
+【场景】
+【现象】
+【解决方案】
+
+【场景】
+【现象】
+【解决方案】
+
+【场景】
+【现象】
+【解决方案】

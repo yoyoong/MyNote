@@ -4,4 +4,5 @@
 
 # 设置当前用户环境变量vi .bash_profile 或者是 vi ~/.bashrc，然后使环境变量生效source .bash_profile
 
-# 从bash节点到submit节点：source .profile
+# 从bash节点到submit节点
+source .profile

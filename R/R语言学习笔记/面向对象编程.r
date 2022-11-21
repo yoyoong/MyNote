@@ -46,7 +46,6 @@ hyy 50000 TRUE
 > k
 hyy 50000 TRUE
 
-
 ##### 编写S4类
 ### 定义类：setClass()
 ### 创建对象：new()

@@ -101,6 +101,9 @@ pdf
 
 ##### ggplot2绘图模板：ggplot(data = <DATA>) + <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>), stat = <STAT>, position = <POSITION>) + <COORDINATE_FUNCTION> + <FACET_FUNCTION>
 ### 其中，<DATA>为数据集，<GEOM_FUNCTION>为几何对象函数，<MAPPINGS>为映射集合，<STAT>为统计变换算法，<POSITION>为位置调整方式，COORDINATE_FUNCTION为坐标轴转换函数，<FACET_FUNCTION>为分面函数
+# 也可去掉参数名，如下面两个语句效果一样
+> ggplot(data = diamonds) + geom_bar(mapping = aes(x = cut))
+> ggplot(diamonds) + geom_bar(aes(cut))
 
 ##### ggplot2对分组数据进行排序：reorder()函数
 > ggplot(data = mpg) + geom_boxplot(mapping = aes(x = reorder(class, hwy, FUN = median), y = hwy)) + coord_flip() # 按中位数排序

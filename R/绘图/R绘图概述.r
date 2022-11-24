@@ -101,4 +101,11 @@ pdf
 
 ##### ggplot2绘图模板：ggplot(data = <DATA>) + <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>), stat = <STAT>, position = <POSITION>) + <COORDINATE_FUNCTION> + <FACET_FUNCTION>
 ### 其中，<DATA>为数据集，<GEOM_FUNCTION>为几何对象函数，<MAPPINGS>为映射集合，<STAT>为统计变换算法，<POSITION>为位置调整方式，COORDINATE_FUNCTION为坐标轴转换函数，<FACET_FUNCTION>为分面函数
+
+##### ggplot2对分组数据进行排序：reorder()函数
+> ggplot(data = mpg) + geom_boxplot(mapping = aes(x = reorder(class, hwy, FUN = median), y = hwy)) + coord_flip() # 按中位数排序
+
+##### 发现异常值：coord_cartesian()函数可将坐标轴某一位置附近的图放大，有助于发现少量异常值的存在
+> ggplot(diamonds) + geom_histogram(mapping = aes(x = y), binwidth = 0.5)
+> ggplot(diamonds) + geom_histogram(mapping = aes(x = y), binwidth = 0.5) + coord_cartesian(ylim = c(0, 50)) # y轴的范围设置为0-50
 ################################################################### ggplot2库 ###################################################################

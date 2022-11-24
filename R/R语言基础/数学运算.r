@@ -31,12 +31,37 @@ exp(x^2) * (2 * x)
 > integrate(function(x) x ^ 2, 0, 1) # 数值积分
 0.3333333 with absolute error < 3.7e-15
 
-# 计算向量的累计和以及累计积：cumsum()和cumprod()函数
+# 偏移函数：lead()和lag()函数可计算序列的领先值和滞后值
+> x <- 1:10
+> lag(x)
+ [1] NA  1  2  3  4  5  6  7  8  9
+> lead(x)
+ [1]  2  3  4  5  6  7  8  9 10 NA
+
+# 计算向量的累计值：cumsum()、cumprod()、commin()和cummax()函数分别计算累加和、累加积、累加最小值和累加最大值
 > x <- c(5, 12, 13, -1)
 > cumsum(x)
 [1]  5 17 30 29
 > cumprod(x)
 [1]    5   60  780 -780
+# dplyr:cummean()函数可计算累加均值
+> cummean(x)
+[1]  5.00  8.50 10.00  7.25
+
+# 排秩：可使用min_rank()、row_number()、dense_rank()、percent_rank()和cume_dist()等函数
+> y <- c(5, 2, 2, 1, NA, 3, 4)
+> min_rank(y)
+[1]  6  2  2  1 NA  4  5
+> min_rank(desc(y))
+[1]  1  4  4  6 NA  3  2
+> row_number(y)
+[1]  6  2  3  1 NA  4  5
+> dense_rank(y)
+[1]  5  2  2  1 NA  3  4
+> percent_rank(y)
+[1] 1.0 0.2 0.2 0.0  NA 0.6 0.8
+> cume_dist(y)
+[1] 1.0000000 0.5000000 0.5000000 0.1666667        NA 0.6666667 0.8333333
 
 ###### 统计分布函数：常用的分布包括正态分布（norm）、卡方分布（chisq）、二项分布（binom）、指数分布（exp）、伽马分布（gamma）、泊松分布（pois）
 ### 各种分布分布的函数名有一套统一的前缀：

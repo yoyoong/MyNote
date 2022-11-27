@@ -1,20 +1,36 @@
-##### 获取字符长度：nchar()函数
+##### 获取字符长度：nchar()函数、stringr:str_length()函数
 > nchar("abc de/n")
 [1] 8
 > nchar(NULL) # 用在非字符串上可能会得到不可预料的结果，要想得到一致的结果，可使用CRAN上的stringr包
 integer(0)
 > nchar(NA)
 [1] NA
+> str_length(c("a", NULL, NA))
+[1]  1 NA
 
-##### 拼接字符串：paste()函数
+##### 拼接字符串：paste()函数、stringr:str_c()函数
 > paste("abc", "de") # 默认分隔符为空格
 [1] "abc de"
 > paste("abc", "de", sep = "") # 不需要分隔符
 [1] "abcde"
+> paste("prefix-", c("a", "b", "c"), "-suffix") # 可向量化，stringr:str_c()函数效果一样
+[1] "prefix- a -suffix" "prefix- b -suffix" "prefix- c -suffix"
+> str_c("abc", "de")
+[1] "abcde"
+> str_c("abc", "de", sep = ",")
+[1] "abc,de"
 
-##### 截取字符串：subst()函数
+##### 截取字符串：subst()函数、stringr:str_sub()函数
 > substr("abcde", 2, 4)
 [1] "bcd"
+> str_sub(c("Apple", "Banana", "Pear"), 1, 3) # 可向量化
+[1] "App" "Ban" "Pea"
+> str_sub(c("Apple", "Banana", "Pear"), 2) # stringr:str_sub()函数可缺省终止位置，substr不行
+[1] "pple"  "anana" "ear" 
+> x <- "Apple"
+> str_sub(x, 1) <- str_to_lower(str_sub(x, 1)) # 还可以使用str_sub()函数的赋值形式来修改字符串
+> x
+[1] "apple"
 
 ##### 按分隔符分割字符串：strsplit()函数
 > strsplit("2022-11-5", split = "-")

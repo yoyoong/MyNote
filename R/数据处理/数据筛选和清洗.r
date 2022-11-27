@@ -42,3 +42,59 @@ all(count.fields("file", sep = "\t") >= 5)
 > arrange(flights, year, month, day) # 按年、月、日排序
 > arrange(flights, desc(arr_delay)) # 使用desc()可以按列进行降序排序
 
+##### 对多个变量进行连接：可使用dplyr库函数或base::merge()函数
+> x <- tribble(~key, ~val_x,
++     1, "x1",
++     2, "x2",
++     3, "x3"
++ )
+> y <- tribble(~key, ~val_y,
++     1, "y1",
++     2, "y2",
++     4, "y3"
++ )
+# 内连接：连接两个变量相等的键
+> inner_join(x, y) # 或merge(x, y)
+# A tibble: 2 × 3
+    key val_x val_y
+  <dbl> <chr> <chr>
+1     1 x1    y1   
+2     2 x2    y2   
+# 左连接：保留第一个变量中的所有键
+> left_join(x, y) # 或merge(x, y, all.x = TRUE)
+# A tibble: 3 × 3
+    key val_x val_y
+  <dbl> <chr> <chr>
+1     1 x1    y1   
+2     2 x2    y2   
+3     3 x3    NA   
+# 右连接：保留第二个变量中的所有键
+> right_join(x, y) # 或merge(x, y, all.y = TRUE)
+# A tibble: 3 × 3
+    key val_x val_y
+  <dbl> <chr> <chr>
+1     1 x1    y1   
+2     2 x2    y2   
+3     4 NA    y3   
+# 全连接：连接两个变量的所有键
+> full_join(x, y) # 或merge(x, y, all.x = TRUE, all.y = TRUE)
+# A tibble: 4 × 3
+    key val_x val_y
+  <dbl> <chr> <chr>
+1     1 x1    y1   
+2     2 x2    y2   
+3     3 x3    NA   
+4     4 NA    y3  
+# 半连接：保留x表中与y表中的键相匹配的所有键
+> semi_join(x, y)
+# A tibble: 2 × 2
+    key val_x
+  <dbl> <chr>
+1     1 x1   
+2     2 x2  
+# 反连接：保留x表中与y表中的键不匹配的所有键
+> anti_join(x, y)
+# A tibble: 1 × 2
+    key val_x
+  <dbl> <chr>
+1     3 x3   

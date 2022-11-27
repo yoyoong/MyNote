@@ -1,4 +1,4 @@
-########################################################### 使用tidyverse中的readr包加载数据 #########################################################
+########################################################### 使用tidyverse中的readr包输入输出数据 #######################################################
 ##### readr包中读取数据的函数与R自带的函数相比，速度更快，推荐使用
 ##### read_csv()函数：读取逗号分隔文件
 > heights <- read_csv("hg19.csv")
@@ -24,4 +24,21 @@ Rows: 2 Columns: 3
 ##### read_fwf()函数：读取固定宽度的文件。可使用fwf_widths( 函数按照宽度来设定域，也可以使用fwf_positions()函数按照位置来设定域
 ##### read_log()函数：读取Apache风格的日志文件（需安装webreadr包）
 
+##### 获取读取数据的失败记录
+> problems(hg19)
+# A tibble: 14 × 5
+     row   col expected actual file                             
+   <int> <int> <chr>    <chr>  <chr>                            
+ 1   876    18 a double null   C:/Users/94835/Documents/hg19.csv
+ 2   876    19 a double null   C:/Users/94835/Documents/hg19.csv
+
+##### 写入文件
+write_csv(challenge, "challenge.csv")
+# 注意，当保存为CSV文件时，类型信息就丢失了，这使得CSV文件在暂存临时结果时有些不可靠——每次加载时都要重建列类型
+# write_rds()和read_rds()函数是对基础函数readRDS()和saveRDS()的统一包装，可使用write_rds()函数可以将数据保存为R自定义的二进制RDS格式
+write_rds(challenge, "challenge.rds")
+read_rds("challenge.rds")
 ######################################################################################################################################################
+
+##### 读取SPSS、Stata和SAS文件：haven包
+##### 读取Excel文件：readxl

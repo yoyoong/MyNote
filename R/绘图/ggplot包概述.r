@@ -1,78 +1,3 @@
-## 绘制一张空白图：plot()
-plot(c(-3, 3), c(1, 5), type = "n", xlab = "x", ylab = "y") # 绘制x轴范围-3到3，y轴范围1到5的空白图
-> x <- c(1, 2, 3)
-> y <- c(1, 3, 8)
-### 添加线段：abline()函数
-> abline(c(0, 0), c(3, 3))
-### 添加点：points()函数
-> points(c(2, 5))
-### 添加图例：legend()函数
-### 添加文字：text()函数
-> text(1.5, 5, "test")
-### 精准定位：locator()函数
-> hist(x) # 先绘制一个图形
-> locator(1) # 弹出一个十字符，点击图形上的点，返回该点坐标
-$x
-[1] 1.681836
-$y
-[1] 0.5404975
-
-### 定制图形
-## 改变字符大小：cex选项
-> text(1.5, 5, "test", cex = 1.5)
-## 改变坐标轴的范围：xlim和ylim选项
-## 添加多边形：polygon()函数
-> polygon(c(1, 2, 2, 1), c(1, 1, 2, 2), col = "gray")
-## 拟合散点：lowess()或loess()函数
-lowess(data)
-##### 绘制散点图以及拟合曲线
-> plot(c(1, 2, 3), c(4, 5, 6))
-> plot(c(1, 3), c(4, 6), type = "n")
-> x <- c(1, 2, 3)
-> y <- c(1, 3, 8)
-> plot(x, y)
-> lmout <- lm(y ~ x)
-> abline(lmout)
-## 绘制具有显式表达式的函数：curve()函数
-> curve((x ^ 2 + 1) ^ 0.5, 0, 5, add = T) # add=T表示在现有图中添加这条曲线
-
-##### 绘图设备控制：每做一张图，可以放到不同的窗口，有时候，明明代码运行了没有报错，但是右边plot一动不动，
-##### 是因为我们的操作对象不是它，而是另外一张图，所以，我们要经常看看当前存在多少设备（devices），或称画布
-dev.list() # 返回打开的设备的名单列表，但不包含空设备；
-dev.off() # 关闭指定的设备（缺省情况下为当前设备）；当前设备被关闭后，若还有打开的设备，则紧接着的下一个打开的设备变为当前设备，返回新打开的活跃设备的名字和编号。
-# 注意：设备1是不能被关闭的，即对设备1进行关闭操作是错误的；
-graphics.off() # 关闭所有打开的设备；
-dev.set() # 指定一个特定的设备为活跃设备，但若没有那个指定的设备，等同于dev.next();若指定设备的值为1，则打开一个新的设备，并且指定那个设备为活跃设备，返回新设备的名字和编号。
-dev.new() # 打开一个新的设备。R中经常根据需要自动的打开新的设备，但也能使用跨平台的方式打开更多的设备；返回新设备的名字和编号。
-dev.cur() # 查看当前的活跃设备；返回包含当前活跃设备的名字和编号的向量；如果是返回值是1,空设备，即没有活跃设备。
-dev.next() # 查看紧随当前活跃进程的下一个进程；返回其名字和编号。
-dev.prev() # 查看当前活跃进程的前一个进程；返回其名字和编号。
-
-######## 将图形保存到文件
-> pdf("plot.pdf") # 打开一个pdf文件
-> dev.list() # RStudioGD图形窗口的设备编号为2，pdf文件的设备编号是3，当前活动的设备是该pdf文件，此时所有的图形输出都会被写入这一文件，而不是绘制在屏幕上
-RStudioGD       png       pdf 
-        2         3         4 
-### 因此要想将图形保存到文件，只需建立一个pdf设备，然后将在屏幕上绘图的代码重新运行一遍
-### 将当前显示的图形保存到文件的一个方法是：将当前屏幕重新设置为活动设备，然后将其内容复制到pdf设备中
-> dev.set(2)
-RStudioGD 
-        2 
-> dev.copy(which = 4)
-pdf 
-  4 
-> dev.set(3)
-png 
-  3 
-> dev.off() # 需要关闭pdf设备才能看到图形
-pdf 
-  4 
-
-##### 绘制三维图形：使用lattice库
-### 绘制曲面图：persp()和wireframe()函数
-### 绘制三维散点图：cloud()函数
-
-################################################################### ggplot2库 ###################################################################
 ##### ggplot2介绍：一张统计图形就是从数据到几何对象(geometric object, 缩写为geom, 包括点、线、条形等)的图形属性(aesthetic attributes, 缩写为aes, 包括颜色、形状、大小等)的一个映射。此外, 图形中还可能包含数据的统计变换(statistical transformation, 缩写为stats), 最后绘制在某个特定的坐标系(coordinate system, 缩写为coord)中, 而分面(facet, 指将绘图窗口划分为若干个子窗口)则可以用来生成数据中不同子集的图形。
 
 ########## ggplot2的基本要素
@@ -105,10 +30,43 @@ pdf
 > ggplot(data = diamonds) + geom_bar(mapping = aes(x = cut))
 > ggplot(diamonds) + geom_bar(aes(cut))
 
+
+##### 图形添加标签
+> ggplot(mpg, aes(displ, hwy)) + geom_point(aes(color = class)) + geom_smooth(se = FALSE) +
++     labs(title = "Fuel efficiency generally decreases with engine size", # 添加标题
++          subtitle = "Two seaters (sports cars) are an exception because of their light weight", # 添加子标题
++          caption = "Data from fueleconomy.gov") # 右下角添加文本（常用于描述数据来源）
+> ggplot(mpg, aes(displ, hwy)) + geom_point(aes(color = class)) + geom_smooth(se = FALSE) +
++     labs(x = "Engine displacement (L)",  y = "Highway fuel economy (mpg)", # 坐标轴标题
++          colour = "Car type") # 图例标题
+##### 在图形中添加注释
+> best_in_class <- mpg %>% group_by(class) %>% filter(row_number(desc(hwy)) == 1) # 使用dplyr选取出每类汽车中效率最高的型号
+> ggplot(mpg, aes(displ, hwy)) + geom_point(aes(color = class)) +
++     geom_text(aes(label = model), data = best_in_class) # 标记效率最高的型号
+> ggplot(mpg, aes(displ, hwy)) + geom_point(aes(color = class)) +
++     geom_label(aes(label = model), data = best_in_class, nudge_y = 2, alpha = 0.5) # 为文本加上方框，nudge_y参数让标签位于相应数据点的正上方
+### 使用由ggrepel包自动调整标签的位置，使它们免于重叠
+> ggplot(mpg, aes(displ, hwy)) + geom_point(aes(color = class)) + 
++     geom_point(size = 3, shape = 1, data = best_in_class) +
++     ggrepel::geom_label_repel(aes(label = model), data = best_in_class)  # 还用较大的空心圆来强调添加了标签的数据点
+### 将标签直接放在图形上以替代图例
+> class_avg <- mpg %>% group_by(class) %>% summarize(displ = median(displ), hwy = median(hwy)) # 计算每组数据的中心点
+> ggplot(mpg, aes(displ, hwy, color = class)) +
++  ggrepel::geom_label_repel(aes(label = class), data = class_avg, size = 6, label.size = 0, segment.color = NA) +
++  geom_point() + theme(legend.position = "none") # 不显示图例
+### 向图中任意位置添加自定义标签
+> label <- tibble(displ = max(displ), hwy = max(hwy), # 定义标签的位置（如果想让标签紧贴着图形边界，可以使用+Inf和-Inf值）
++  label = "Increasing engine size is \nrelated to decreasing fuel economy.") # 定义标签的显示字符
+> ggplot(mpg, aes(displ, hwy)) + geom_point() +
++  geom_text(aes(label = label), data = label, vjust = "top", hjust = "right") # hjust和vjust用于控制标签的对齐方式
+### 添加其他注释
+# geom_hline()和geom_vline()函数：添加参考线
+# geom_rect()函数：在感兴趣的数据点周围绘制一个矩形，矩形的边界由图形属性xmin、xmax、ymin和ymax确定
+# geom_segment()函数及arrow参数：绘制箭头，指向需要关注的数据点。使用图形属性x和y来定义开始位置，使用xend和yend来定义结束位置
+
 ##### ggplot2对分组数据进行排序：reorder()函数
 > ggplot(data = mpg) + geom_boxplot(mapping = aes(x = reorder(class, hwy, FUN = median), y = hwy)) + coord_flip() # 按中位数排序
 
 ##### 发现异常值：coord_cartesian()函数可将坐标轴某一位置附近的图放大，有助于发现少量异常值的存在
 > ggplot(diamonds) + geom_histogram(mapping = aes(x = y), binwidth = 0.5)
 > ggplot(diamonds) + geom_histogram(mapping = aes(x = y), binwidth = 0.5) + coord_cartesian(ylim = c(0, 50)) # y轴的范围设置为0-50
-################################################################### ggplot2库 ###################################################################

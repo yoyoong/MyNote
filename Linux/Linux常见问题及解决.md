@@ -24,17 +24,13 @@
 * 现象：报错ERROR: cannot verify mirrors.tuna.tsinghua.edu.cn’s certificate
 * 解决方案：在wget命令最后加入--no-check-certificate即可解决
 ****
-* 场景：
-* 现象：
-* 解决方案
-    * 1、
-    * 2、
+* 场景：Mongodb建立索引
+* 现象：报错MongoError: command createIndexes requires authentication
+* 解决方案：连接Mongodb数据库需加入用户名和密码：mongodb://admin:SnKIrfCZ@127.0.0.1:27017
 ****
-* 场景：
-* 现象：
-* 解决方案
-    * 1、
-    * 2、
+* 场景：Mongodb使用mongoimport导入数据
+* 现象：报错unable to authenticate using mechanism "SCRAM-SHA-1": (AuthenticationFailed)
+* 解决方案：mongoimport命令加上authenticationDatabase参数，指定数据库名称，如mongoimport --authenticationDatabase admin -u admin -p SnKIrfCZ ...
 ****
 
 * 场景：

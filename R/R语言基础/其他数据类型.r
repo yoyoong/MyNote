@@ -39,3 +39,16 @@ Levels: 周日 < 周一 < 周二 < 周三 < 周四 < 周五 < 周六
 > year(dt) <- 2020
 > dt
 [1] "2020-12-02 15:51:40 CST"
+##### 时间间隔
+### 将两个日期相减
+> age <- today() - ymd(19971217)
+> age
+Time difference of 9118 days
+### lubridate提供了总是使用秒为单位的另一种计时对象——时期
+> as.duration(age)
+[1] "787795200s (~24.96 years)"
+### lubridate还提供了阶段对象，使用“人工”时间，比如日和月
+> now() + days(1)
+[1] "2022-12-05 19:22:11 CST"
+> now() + months(1) + days(1)
+[1] "2023-01-05 19:22:53 CST"

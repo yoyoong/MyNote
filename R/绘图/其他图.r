@@ -1,4 +1,4 @@
-##### 绘制两个分类变量的数量图（泡泡图）：geom_count()函数
+##### ggplot绘制两个分类变量的数量图（泡泡图）：geom_count()函数
 > ggplot(data = diamonds) + geom_count(mapping = aes(x = cut, y = color))
 # 可使用计算出具体数值
 > diamonds %>% count(color, cut)

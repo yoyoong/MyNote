@@ -1,0 +1,3 @@
+# 启动CORS
+cd /var/tmp/www/apache2/htdocs/mhap/mhapdata
+/usr/local/bin/http-server ./ --cors

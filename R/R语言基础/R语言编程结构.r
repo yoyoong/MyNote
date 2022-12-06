@@ -62,6 +62,17 @@ a b c
 d e f 
 1 2 4 
 ## 匿名函数：不给函数命名，如apply中使用的函数
+##### 可以接受任意数量的输入的函数
+> commas <- function(...) stringr::str_c(..., collapse = ", ")
+> commas(letters[1:10])
+[1] "a, b, c, d, e, f, g, h, i, j"
+> commas(letters[1:5])
+[1] "a, b, c, d, e"
+
+########## 通用参数值检查函数：stopifnot() 函数，它会检查每个参数是否为真，如果某个参数不为真，则生成一条通用的错误消息
+> x <- NA
+> stopifnot(x)
+Error: 不是所有的x都是TRUE
 
 ##### 使用管道（%>%）重写多种操作：x %>% f(y)会转换为f(x, y)，x %>% f(y) %>% g(z)会转换为g(f(x, y), z)，以此类推
 # 实例：要研究每个目的地的距离和平均延误时间之间的关系
@@ -73,3 +84,5 @@ delays <- flights %>%
  delay = mean(arr_delay, na.rm = TRUE)
 ) %>% # 进行摘要统计，计算距离、平均延误时间和航班数量
 filter(count > 20, dest != "HNL") # 通过筛选除去噪声点和火奴鲁鲁机场，因为到达该机场的距离几乎是到离它最近机场的距离的2倍
+
+########## 使用magrittr进行管道操作（tidyverse中的所有包都会自动加载%>%，因此一般不用显式加载magrittr）

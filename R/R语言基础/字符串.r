@@ -15,6 +15,8 @@ integer(0)
 [1] "abcde"
 > paste("prefix-", c("a", "b", "c"), "-suffix") # 可向量化，stringr:str_c()函数效果一样
 [1] "prefix- a -suffix" "prefix- b -suffix" "prefix- c -suffix"
+> paste0("abc", "de")
+[1] "abcde"
 > str_c("abc", "de")
 [1] "abcde"
 > str_c("abc", "de", sep = ",")

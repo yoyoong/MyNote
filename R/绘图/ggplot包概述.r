@@ -30,7 +30,6 @@
 > ggplot(data = diamonds) + geom_bar(mapping = aes(x = cut))
 > ggplot(diamonds) + geom_bar(aes(cut))
 
-
 ##### 图形添加标签
 > ggplot(mpg, aes(displ, hwy)) + geom_point(aes(color = class)) + geom_smooth(se = FALSE) +
 +     labs(title = "Fuel efficiency generally decreases with engine size", # 添加标题
@@ -39,6 +38,7 @@
 > ggplot(mpg, aes(displ, hwy)) + geom_point(aes(color = class)) + geom_smooth(se = FALSE) +
 +     labs(x = "Engine displacement (L)",  y = "Highway fuel economy (mpg)", # 坐标轴标题
 +          colour = "Car type") # 图例标题
+
 ##### 在图形中添加注释
 > best_in_class <- mpg %>% group_by(class) %>% filter(row_number(desc(hwy)) == 1) # 使用dplyr选取出每类汽车中效率最高的型号
 > ggplot(mpg, aes(displ, hwy)) + geom_point(aes(color = class)) +
@@ -64,9 +64,31 @@
 # geom_rect()函数：在感兴趣的数据点周围绘制一个矩形，矩形的边界由图形属性xmin、xmax、ymin和ymax确定
 # geom_segment()函数及arrow参数：绘制箭头，指向需要关注的数据点。使用图形属性x和y来定义开始位置，使用xend和yend来定义结束位置
 
+##### 图形标度设置
+### 坐标轴刻度设置与图例项目：主要参数有breaks和labels。breaks控制坐标轴刻度的位置，以及与图例项目相关的数值显示。labels控制与每个坐标轴刻度或图例项目相关的文本标签
+> ggplot(mpg, aes(displ, hwy)) + geom_point() + scale_y_continuous(breaks = seq(15, 40, by = 5)) # 设置y轴刻度
+> ggplot(mpg, aes(displ, hwy)) + geom_point() +
++     scale_x_continuous(labels = NULL) + scale_y_continuous(labels = NULL) # 设置x轴和y轴不显示刻度
+> base <- ggplot(mpg, aes(displ, hwy)) + geom_point(aes(color = class)) # 使用默认图例
+> base + theme(legend.position = "left")
+> base + theme(legend.position = "top")
+> base + theme(legend.position = "bottom")
+> base + theme(legend.position = "right") # 默认设置
+> base + theme(legend.position = "none") # 去掉图例
+### 标度替换（坐标轴刻度不是线性递增）
+> ggplot(diamonds, aes(carat, price)) + geom_bin2d() # 原始图形
+> ggplot(diamonds, aes(carat, price)) + geom_bin2d() + scale_x_log10() + scale_y_log10() # x轴和y轴同时以log10缩放
+
+##### 图形缩放（如放大图形的一片区域）：在coord_cartesian()函数中设置xlim和ylim参数值
+> ggplot(mpg, mapping = aes(displ, hwy)) + geom_point(aes(color = class)) + geom_smooth() +
++     coord_cartesian(xlim = c(5, 7), ylim = c(10, 30))
+
 ##### ggplot2对分组数据进行排序：reorder()函数
 > ggplot(data = mpg) + geom_boxplot(mapping = aes(x = reorder(class, hwy, FUN = median), y = hwy)) + coord_flip() # 按中位数排序
 
 ##### 发现异常值：coord_cartesian()函数可将坐标轴某一位置附近的图放大，有助于发现少量异常值的存在
 > ggplot(diamonds) + geom_histogram(mapping = aes(x = y), binwidth = 0.5)
 > ggplot(diamonds) + geom_histogram(mapping = aes(x = y), binwidth = 0.5) + coord_cartesian(ylim = c(0, 50)) # y轴的范围设置为0-50
+
+##### 保存图形：ggsave()可以将最近生成的图形保存到磁盘
+ggsave("plot.pdf")

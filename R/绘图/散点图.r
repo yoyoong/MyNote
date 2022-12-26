@@ -22,6 +22,7 @@ geom_point(
 > ggplot(data = mpg) + geom_point(mapping = aes(x = displ, y = hwy, size = class)) # 映射为大小
 > ggplot(data = mpg) + geom_point(mapping = aes(x = displ, y = hwy, alpha = class)) # 映射为透明度
 > ggplot(data = mpg) + geom_point(mapping = aes(x = displ, y = hwy, shape = class)) # 映射为形状（只能同时使用6种情况，多出的变量将不会出现在图中）
+> ggplot(mpg, aes(displ, hwy)) + geom_point(aes(color = drv, shape = drv)) # 同时映射为形状和颜色
 
 ##### 对于数据量特别大的散点图无法清晰看到所有点分布时，可使用geom_bin2d()和geom_hex()函数在两个维度上进行分箱（把一个区域内的数量通过颜色展示出来）
 ##### geom_bin2d()创建长方形分箱；geom_hex()创建六边形分箱（需要安装hexbin包）

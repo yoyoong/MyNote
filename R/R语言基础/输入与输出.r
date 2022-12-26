@@ -40,7 +40,7 @@ seek(con2 = con, where = 0) # 从开始处读取
 > writeLines(c("abc", "de"), file) # 同时写入两行
 > close(file) # 关闭文件
 
-##### 获取文件和目录信息
+##### 文件和目录处理
 # 获取当前工作目录
 > getwd()
 [1] "C:/Users/94835/Documents"
@@ -63,3 +63,5 @@ CRC_hg19_MHB.bed   21 FALSE  666 2022-11-04 14:49:43 2022-11-04 14:49:52 2022-11
 [1] "CRC_hg19_MHB.bed" "desktop.ini"      "hg19_CpG"         "hg38_CpG"         "outputDir"       
 [6] "windows"         
 > dir(recursive = T) # 显示整个目录树
+##### 文件重命名/文件移动
+file.name("a/b/c.txt", "a/d/e.txt") # 从文件夹a/b/移动到a/d/，且文件名从c.txt改为e.txt

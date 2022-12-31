@@ -122,6 +122,51 @@ cat: 2	err.txt: No such file or directory
 cat: 3	mk_mlink.sh: No such file or directory
 
 
+########## tr：字符替换、字符删除以及重复字符压缩
+### tr只能通过stdin（标准输入）接收输入（无法通过命令行参数接收）。其调用格式如下：tr [options] set1 set2 
+### 来自stdin的输入字符会按照位置从set1映射到set2（set1中的第一个字符映射到set2中的第一个字符，以此类推），然后将输出写入stdout（标准输出）。set1和set2是字符类或字符组。如果两个字符组的长度不相等，那么set2会不断复制其最后一个字符，直到长度与set1相同。如果set2的长度大于set1，那么在set2中超出set1长度的那部分字符则全部被忽略。
+-bash-4.2$ echo "HELLO WHO IS THIS" | tr 'A-Z' 'a-z'
+hello who is this
+### 在tr中利用集合的概念，可以轻松地将字符从一个集合映射到另一个集合中
+-bash-4.2$ echo 12345 | tr '0-9' '9876543210'
+87654
+### tr命令可以用来加密。ROT13是一个著名的加密算法。在ROT13算法中，字符会被移动13个位置，因此文本加密和解密都使用同一个函数
+-bash-4.2$  echo "tr came, tr saw, tr conquered." | tr 'a-zA-Z' 'n-za-mN-ZA-M' # 加密
+ge pnzr, ge fnj, ge pbadhrerq.
+-bash-4.2$ echo ge pnzr, ge fnj, ge pbadhrerq. | tr 'a-zA-Z' 'n-za-mN-ZA-M' # 解密
+tr came, tr saw, tr conquered.
+##### 用tr删除字符：选项-d，可以通过指定需要被删除的字符集合，将出现在stdin中的特定字符清除掉
+-bash-4.2$ echo "Hello 123 world 456" | tr -d '0-9'
+Hello  world
+##### 字符组补集：可以利用选项-c来使用set1的补集，如果只给出了set1，那么tr会删除所有不在set1中的字符。如果也给出了set2，tr会将不在set1中的字符转换成set2中的字符。如果使用了-c选项，set1和set2必须都给出。如果-c与-d选项同时出现，你只能使用set1，其他所有的字符都会被删除。
+-bash-4.2$ echo hello 1 char 2 next 4 | tr -c '0-9' '.' # 将不在set1中的字符替换成点
+......1......2......4.
+-bash-4.2$ echo hello 1 char 2 next 4 | tr -d -c '0-9' # 删除不在补集中的所有字符
+124
+##### 用tr压缩字符：-s选项可以删除字符串中重复出现的字符，如空格、换行符
+124-bash-4.2$ echo "GNU is not UNIX. Recursive right ?" | tr -s ' '
+GNU is not UNIX. Recursive right ?
+##### 还可以用tr以一种巧妙的方式将文件中的数字列表进行相加，tr命令将'\n'替换成了'+'，得到了字符串1+2+3+，尾部多了一个操作符+，为了抵消这个多出来的操作符，再加一个0。$[ operation ]执行算术运算，因此就形成了以下命令：echo $[ 1+2+3+0 ]
+-bash-4.2$ cat sum.txt
+1
+2
+3
+-bash-4.2$ cat sum.txt | echo $[ $(tr '\n' '+') 0 ] 
+6
+# 如果有一个包含字母和数字的文件，我们想计算其中的数字之和，需要利用tr的-d选项删除文件中的字母，然后将空格替换成+
+-bash-4.2$ cat sum.txt
+first 1 line
+the 2 line
+the 3 line
+-bash-4.2$ cat sum.txt | tr -d [a-z] | echo "total:$[ $(tr ' ' '+') 0 ]"
+total:6
+##### tr可以将不同的字符类作为集合使用
+-bash-4.2$ echo "HELLO WHO IS THIS" | tr '[:upper:]' '[:lower:]'
+hello who is this
+
+
+
+
 
 ########## sort：排序命令
 ##### 语法：sort [-bcdfimMnr][-o<输出文件>][-t<分隔字符>][+<起始栏位>-<结束栏位>][--help][--verison][文件][-k field1[,field2]]`
@@ -130,7 +175,7 @@ cat: 3	mk_mlink.sh: No such file or directory
 ### -d：排序时，处理英文字母、数字及空格字符外，忽略其他的字符。
 ### -f：排序时，忽略大小写。
 ### -i：排序时，除了040至176之间的ASCII字符外，忽略其他的字符。
-### -k：排序时，按-t分割后的第几栏排序
+### -k：排序时，按-t（空格？）分割后的第几栏排序
 ###     按多栏排序时输入-k n1 -k n2 -k n3 …
 ###     若某行降序可在行数后面加r，按数值排序可加n
 ###     若按某栏中的某个字符排序可设置为n.m
@@ -150,19 +195,43 @@ sort -n number.txt # 按数值排序（而不是ASCII码，如10比2大）
 sort -n -k 2 -t : facebook.txt # 按以“:”分割后的第2栏排序
 sort -n -t ' ' -k 3r -k 2 facebook.txt # 按以空格符分割后的第2栏升序、第3行降序排序
 sort -t ' ' -k 1.2 facebook.txt # 按以空格符分割后的第1栏的第2个字符排序
-
+sort file1.txt file2.txt -o sorted.txt # 排序一组文件，或sort file1.txt file2.txt > sorted.txt
+sort -m sorted1 sorted2 # 合并两个已排序过的文件
+sort file1.txt | uniq # 找出已排序文件中不重复的行
+if sort -c fileToCheck ; then echo sorted ; else echo unsorted ; fi # 检查文件是否已经排序过
+-bash-4.2$ cat temp.txt
+1 mac 2000 
+2 winxp 4000 
+3 bsd 1000 
+4 linux 1000
+-bash-4.2$ sort -k 3 temp.txt # 按第3列排序
+4 linux 1000
+3 bsd 1000 
+1 mac 2000 
+2 winxp 4000 
+-bash-4.2$ sort -k 2.3,2.4 temp.txt # 按第2列中的第3到4个字符排序
+1 mac 2000 
+2 winxp 4000 
+4 linux 1000
+3 bsd 1000 
+sort -bd unsorted.txt # 忽略空格以及非字母和数字字符等
 
 ########## uniq：检查及删除文本文件中重复出现的行列，一般与sort命令结合使用
-##### 语法：`uniq [-cdu][-f<栏位>][-s<字符位置>][-w<字符位置>][输入文件][输出文件]`
-### c或--count：在每列旁边显示该行重复出现的次数。
-### d或--repeated：仅显示重复出现的行列。
-### f<栏位>或--skip-fields=<栏位>：忽略比较指定的栏位。
-### s<字符位置>或--skip-chars=<字符位置>：忽略比较指定的字符。
-### u或--unique：仅显示出一次的行列。
-### w<字符位置>或--check-chars=<字符位置>：指定要比较的字符。
+##### 语法：uniq [-cdu][-f<栏位>][-s<字符位置>][-w<字符位置>][输入文件][输出文件]
+### -c：在每列旁边显示该行重复出现的次数。
+### -u：仅显示出一次的行列。
+### -d：仅显示重复出现的行列。
+### -f<栏位>：忽略比较指定的栏位。
+### -s<字符位置>：忽略比较指定的字符。
+### -w<字符位置>：指定要比较的字符。
 ##### 实例：
 uniq testfile # 删除重复行，或uniq -u testfile
 cat 6.txt | sort | uniq # 当重复的行不相邻时，uniq命令不起作用，因此需要先使用sort排好序
+uniq -u sorted.txt # 显示唯一的行，或sort unsorted.txt | uniq -u
+sort unsorted.txt | uniq -d # 找出文件中重复的行
+sort unsorted.txt | uniq -c # 统计各行在文件中出现的次数
+uniq -z file.txt # -z选项可以生成由0值字节终止的输出
+uniq -z file.txt | xargs -0 rm # 删除所有指定的文件，这些文件的名字是从files.txt中读取的（如果某个文件名出现多次，uniq命令只会将这个文件名写入stdout一次）
 
 
 ########## tr：替换或删除文件中的字符

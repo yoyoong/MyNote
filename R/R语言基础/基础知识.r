@@ -34,3 +34,6 @@ source("test.R")
 ### i, j：数值索引（通常用于表示行和列）
 ### n：长度或行的数量
 ### p：列的数量
+
+##### 获取系统配置
+Sys.getenv("LD_LIBRARY_PATH")

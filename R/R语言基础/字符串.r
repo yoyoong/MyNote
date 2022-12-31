@@ -87,3 +87,14 @@ attr(,"useBytes")
 [1] "1.200000"
 > sprintf("%g", 1.2)
 [1] "1.2"
+
+##### 字符串替换函数
+### 替换首次出现的字符串：sub(pattern, replacement, x, ignore.case = FALSE, perl = FALSE,fixed = FALSE, useBytes = FALSE)
+### 替换所有出现的字符串：gsub(pattern, replacement, x, ignore.case = FALSE, perl = FALSE,fixed = FALSE, useBytes = FALSE)
+### 其中，pattern是需要被替换的字符串，replacement是用来替换的字符串，x是目标字符串或字符串向量，ignore.case表示是否区分大小写
+### perl表示是否应该使用Perl兼容的regexp；fixed为TRUE表示pattern是一个字符串，将原样匹配，而且会覆盖所有冲突参数；useBytes为TRUE表示逐个字节匹配而不是逐个字符匹配
+> sub(pattern = 'a', replacement = 'A', x=c('www.idata8.com','idata8'))
+[1] "www.idAta8.com" "idAta8"
+> gsub(pattern = 'a', replacement = 'A', x=c('www.idata8.com','idata8'))
+[1] "www.idAtA8.com" "idAtA8" 
+

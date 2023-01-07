@@ -49,6 +49,11 @@ dev.next() # 查看紧随当前活跃进程的下一个进程；返回其名字�
 dev.prev() # 查看当前活跃进程的前一个进程；返回其名字和编号。
 
 ######## 将图形保存到文件
+##### 保存为image格式：以png格式为例，此外类似的方法还有jpeg()，bmp()，tiff()，pdf()，svg()
+png(filename = "name.png", width = 1200, height = 1200, units = "px", bg = "white", res = 100) # 创建画布
+plot(1:5) # 绘图
+dev.off() # 关闭画布
+##### 保存为pdf格式
 > pdf("plot.pdf") # 打开一个pdf文件
 > dev.list() # RStudioGD图形窗口的设备编号为2，pdf文件的设备编号是3，当前活动的设备是该pdf文件，此时所有的图形输出都会被写入这一文件，而不是绘制在屏幕上
 RStudioGD       png       pdf 
